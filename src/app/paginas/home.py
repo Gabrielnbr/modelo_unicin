@@ -7,9 +7,17 @@
 
 # Imports
 
-import streamlit
+import streamlit as st
+from tratamento import tratamento
 
 # Code
 
 def home():
-    ...
+    df = tratamento.df_pronto_para_consumo()
+    st.dataframe(df)
+
+def app():
+    home()
+
+if __name__ == "__main__":
+    app()

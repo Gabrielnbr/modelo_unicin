@@ -6,25 +6,19 @@
 
 # Imports
 import streamlit as st
-from multiapp import MultiApp
-from paginas import ceaec, outros, home
+from paginas import visualizacao
 
-def app_run():
-    """
-    Este método define toda a aplicação no streamlit e faz sua inicialização
-    """
-    
-    app = MultiApp()
-    # Inicialização do app
-    app.add_app("1. Home Page",home.app)
-    app.add_app("2. CEAEC",ceaec.app )
-    app.add_app("3. outros",outros.app )
-    
-    app.run()
+st.set_page_config( layout='wide' )
+visualizacao.app()
 
 # Main app
 if __name__ == "__main__":
+    pass
+    #app = MultiApp()
+    #   Inicialização do app
+    #app.add_app("1. Home Page",home.app() )
+    #app.add_app("2. Visualizacao",visualizacao.app() )
+    #app.add_app("3. Reposicons",reposicons.app() )
+    #
+    #app.run()
     
-    st.set_page_config( layout='wide' )
-    
-    app_run()
