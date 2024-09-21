@@ -6,6 +6,7 @@
 # License: 
 
 # Imports
+import datetime
 
 import numpy            as np
 import pandas           as pd
@@ -42,8 +43,8 @@ def filtro_linha_data_e_service_name(df: pd.DataFrame)-> pd.DataFrame:
         else:
             df = df.copy()
     
-    filtro_data_inicio = pd.to_datetime(filtro_data[0])
-    filtro_data_fim = pd.to_datetime(filtro_data[1])
+    filtro_data_inicio = pd.to_datetime((filtro_data[0]-datetime.timedelta(days=1)))
+    filtro_data_fim = pd.to_datetime((filtro_data[1]+datetime.timedelta(days=1)))
     
     df = df[(df['date'] > filtro_data_inicio) &\
             (df['date'] < filtro_data_fim)]
