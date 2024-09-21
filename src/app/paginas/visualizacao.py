@@ -28,30 +28,34 @@ def filtro_maquina(df: pd.DataFrame)-> pd.DataFrame:
 
 def filtro_linha_data_e_service_name(df: pd.DataFrame)-> pd.DataFrame:
     
-    linha_date, linha_service_name = st.columns((2))
+    linha_date_inicio, linha_date_fim, linha_service_name = st.columns((3))
     
-    try:
-        with linha_date:
-            filtro_data = st.date_input('Data Início - Data Fim',
-                                        value = (df['date'].min(), df['date'].max()))
-            
-        with linha_service_name:
-            filtro_service_name = st.multiselect('Nome do Serviço',
-                                    sorted(set(df['service_name'].unique())))
-            
-            if filtro_service_name != []:
-                df = df.loc[df['service_name'].isin(filtro_service_name)] 
-            else:
-                df = df.copy()
+    #try:
+    with linha_date_inicio:
+        filtro_data_inicio = st.date_input('Data Início',
+                                            df['date'].min())
+    
+    with linha_date_fim:
+        filtro_data_fim = st.date_input('Data Fim',
+                                        df['date'].max())
         
-        filtro_data_inicio = pd.to_datetime((filtro_data[0]-datetime.timedelta(days=1)))
-        filtro_data_fim = pd.to_datetime((filtro_data[1]+datetime.timedelta(days=1)))
+    with linha_service_name:
+        filtro_service_name = st.multiselect('Nome do Serviço',
+                                sorted(set(df['service_name'].unique())))
         
-        df = df[(df['date'] > filtro_data_inicio) &\
-                (df['date'] < filtro_data_fim)]
-        
-    except:
-        st.markdown("## Os gráficos darão erro. Conclua o filtro da data para evitar esse erro.")
+        if filtro_service_name != []:
+            df = df.loc[df['service_name'].isin(filtro_service_name)] 
+        else:
+            df = df.copy()
+    
+    filtro_data_inicio_a = pd.to_datetime((filtro_data_inicio - datetime.timedelta(days=1)))
+    filtro_data_fim_a = pd.to_datetime((filtro_data_fim + datetime.timedelta(days=1)))
+    
+    df = df[(df['date'] > filtro_data_inicio_a) &\
+            (df['date'] < filtro_data_fim_a)]
+    
+    #except:
+    #    st.markdown("## Os gráficos darão erro. Conclua o filtro da data para evitar esse erro.")
         
     return df
 
