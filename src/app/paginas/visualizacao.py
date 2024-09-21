@@ -102,6 +102,27 @@ def tabela_estatistica(df: pd.DataFrame):
     
     st.header("Tabela com os valores Estatísticos das variáveis numéricas")
     st.dataframe(estatistica, use_container_width=True)
+    
+    
+    hist_cost, hist_quant = st.columns((2))
+    
+    with hist_cost:
+        
+        fig = px.histogram(df,
+                           x= 'cost',
+                           title='Contagem de Custo por Dia',
+                           labels={'cost': 'Custo (USD)'})
+        fig.update_layout(yaxis_title="Contagem Dias")
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with hist_quant:
+        
+        fig2 = px.histogram(df,
+                           x= 'quantity',
+                           title='Contagem de Microserviços por Dia',
+                           labels={'quantity': 'Microserviços'})
+        fig2.update_layout(yaxis_title="Contagem Dias")
+        st.plotly_chart(fig2, use_container_width=True)
 
 def grafico1(df: pd.DataFrame):
     
