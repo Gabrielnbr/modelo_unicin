@@ -6,7 +6,6 @@
 # License: 
 
 # Imports
-import datetime
 
 import numpy            as np
 import pandas           as pd
@@ -126,8 +125,6 @@ def tabela_estatistica(df: pd.DataFrame):
 
 def grafico1(df: pd.DataFrame):
     
-    st.markdown("## Evolução do Custo por Serviço")
-    
     df = df.loc[:,['service_name','cost']]\
             .groupby('service_name')\
             .sum().sort_values(by='cost').reset_index()
@@ -136,6 +133,7 @@ def grafico1(df: pd.DataFrame):
         data_frame= df,
         x = 'service_name',
         y = 'cost',
+        title = 'Evolução do Custo por Serviço',
         labels={'service_name': 'Nome do Serviço', 'cost': 'Custo Total (USD)'},
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -148,8 +146,6 @@ def grafico2(df: pd.DataFrame):
     custo_agg, custo_servico = st.columns((2))
     
     with custo_agg: # Evolução do custo agregado ao longo do tempo
-        
-        st.markdown("#### Evolução do custo agregado ao longo do tempo")
         df2 = df.loc[:,['cost','date']]\
                                 .groupby(['date'])\
                                 .sum().sort_values(by='date').reset_index()
@@ -157,13 +153,12 @@ def grafico2(df: pd.DataFrame):
             data_frame= df2,
             x = 'date',
             y = 'cost',
+            title= 'Evolução do custo agregado ao longo do tempo',
             labels={'date': 'Data', 'cost': 'Custo Total (USD)'}
         )
         st.plotly_chart(fig2, use_container_width=True)
 
     with custo_servico: # Evolução do custo por serviço ao longo do tempo
-        
-        st.markdown("#### Evolução do custo por serviço ao longo do tempo")
         df3 = df.loc[:,['cost','date','service_name']]\
                                 .groupby(['date','service_name'])\
                                 .sum().sort_values(by='date').reset_index()
@@ -173,11 +168,32 @@ def grafico2(df: pd.DataFrame):
             x = 'date',
             y = 'cost',
             color='service_name',
+            title= 'Evolução do custo por serviço ao longo do tempo',
             labels={'date': 'Data', 'cost': 'Custo Total (USD)'}
         )
         st.plotly_chart(fig3, use_container_width=True)
     
     st.markdown(f"### Valor do custo acumulado é de: {df['cost'].sum():.4f} USD")
+    
+def custo_mes(df: pd.DataFrame):
+    
+    df = df.loc[:,['cost','year_month']]\
+            .groupby('year_month')\
+            .sum().sort_values(by='year_month').reset_index()
+
+    fig = px.line(
+        data_frame= df,
+        x = 'year_month',
+        y = 'cost',
+        title="Evolução do Custo por Mes",
+        labels={'year_month': 'Ano Mês', 'cost': 'Custo Total (USD)'},
+        markers=True,
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    ... # Relação custo por serviço
+    
+    st.markdown(f"### Valor do custo acumulado é de: {df['cost'].sum():.4f} USD")
+    
 
 def app():
     df = tratamento.df_pronto_para_consumo()
@@ -191,6 +207,9 @@ def app():
     st.divider()
     
     grafico2(df)
+    st.divider()
+    
+    custo_mes(df)
     st.divider()
     
     tabela_estatistica(df)
