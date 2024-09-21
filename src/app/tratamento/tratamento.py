@@ -17,8 +17,11 @@ def importar_arquivos()-> pd.DataFrame:
     Método para importar os DataFrames salvos no formato pkl.
     Por enquanto não vamos receber dados externos, mas no futuro isso será implementado.
     """
-    ceaec = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_ceaec.pkl","rb"))
-    reposicons = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_reposicons.pkl","rb"))
+    #ceaec = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_ceaec.pkl","rb"))
+    #reposicons = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_reposicons.pkl","rb"))
+    
+    ceaec = pickle.load(open("./src/data/processed/2_0_eda_ceaec.pkl","rb"))
+    reposicons = pickle.load(open("./src/data/processed/2_0_eda_reposicons.pkl","rb"))
     
     return reposicons, ceaec
 
