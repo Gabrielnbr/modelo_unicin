@@ -111,12 +111,11 @@ def grafico1(df: pd.DataFrame):
             .groupby('service_name')\
             .sum().sort_values(by='cost').reset_index()
 
-    fig = px.line(
+    fig = px.histogram(
         data_frame= df,
         x = 'service_name',
         y = 'cost',
         labels={'service_name': 'Nome do Serviço', 'cost': 'Custo Total (USD)'},
-        markers=True
     )
     st.plotly_chart(fig, use_container_width=True)
     ... # Relação custo por serviço
