@@ -30,25 +30,29 @@ def filtro_linha_data_e_service_name(df: pd.DataFrame)-> pd.DataFrame:
     
     linha_date, linha_service_name = st.columns((2))
     
-    with linha_date:
-        filtro_data = st.date_input('Data Início - Data Fim',
-                                    value = (df['date'].min(), df['date'].max()))
+    try:
+        with linha_date:
+            filtro_data = st.date_input('Data Início - Data Fim',
+                                        value = (df['date'].min(), df['date'].max()))
+            
+        with linha_service_name:
+            filtro_service_name = st.multiselect('Nome do Serviço',
+                                    sorted(set(df['service_name'].unique())))
+            
+            if filtro_service_name != []:
+                df = df.loc[df['service_name'].isin(filtro_service_name)] 
+            else:
+                df = df.copy()
         
-    with linha_service_name:
-        filtro_service_name = st.multiselect('Nome do Serviço',
-                                sorted(set(df['service_name'].unique())))
+        filtro_data_inicio = pd.to_datetime((filtro_data[0]-datetime.timedelta(days=1)))
+        filtro_data_fim = pd.to_datetime((filtro_data[1]+datetime.timedelta(days=1)))
         
-        if filtro_service_name != []:
-            df = df.loc[df['service_name'].isin(filtro_service_name)] 
-        else:
-            df = df.copy()
-    
-    filtro_data_inicio = pd.to_datetime((filtro_data[0]-datetime.timedelta(days=1)))
-    filtro_data_fim = pd.to_datetime((filtro_data[1]+datetime.timedelta(days=1)))
-    
-    df = df[(df['date'] > filtro_data_inicio) &\
-            (df['date'] < filtro_data_fim)]
-    
+        df = df[(df['date'] > filtro_data_inicio) &\
+                (df['date'] < filtro_data_fim)]
+        
+    except:
+        st.markdown("## Os gráficos darão erro. Conclua o filtro da data para evitar esse erro.")
+        
     return df
 
 def filtro_cost_e_quatity(df: pd.DataFrame)-> pd.DataFrame:
