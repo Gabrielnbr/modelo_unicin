@@ -6,10 +6,14 @@
 
 # Imports
 import streamlit as st
-from paginas import visualizacao
+from paginas import visualizacao, update_dados
 
 st.set_page_config( layout='wide' )
-visualizacao.app()
+
+pg = st.navigation(
+    [st.Page("paginas/visualizacao.py"),
+     st.Page("paginas/update_dados.py")])
+pg.run()
 
 # Main app
 if __name__ == "__main__":

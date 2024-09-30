@@ -1,8 +1,6 @@
 # Autor: Gabriel Nobre
 # Data: 20 de Setembro de 2024
-# Descrição: Este é um arquivo Python que contém funções relacionadas à página "Pagina Cidades"
-# no aplicativo Streamlit. Ele define a estrutura da página, bem como a inicialização
-# da página "Pagina Cidades"
+# Descrição:
 # License: 
 
 # Imports
@@ -13,7 +11,7 @@ import pandas           as pd
 import streamlit        as st
 import plotly.express   as px
 
-from tratamento import tratamento
+from tratamento import tratar_dados
 
 # Code
 
@@ -204,8 +202,8 @@ def custo_mes(df: pd.DataFrame):
     st.markdown(f"### Valor do custo acumulado é de: {df['cost'].sum():.4f} USD")
     
 
-def app():
-    df = tratamento.df_pronto_para_consumo()
+def run():
+    df = tratar_dados.df_pronto_para_consumo()
     
     df = filtro_maquina(df)
     df = filtro_linha_data_e_service_name(df)
@@ -222,3 +220,8 @@ def app():
     st.divider()
     
     tabela_estatistica(df)
+
+run()
+
+if __name__ == '__main__':
+    run()

@@ -1,0 +1,5 @@
+Sistema Simples de Autenticação de Usuário:
+
+https://github.com/mkhorasani/Streamlit-Authenticator
+https://streamlit-authenticator.readthedocs.io/en/latest/
+https://demo-app-v0-3-3.streamlit.app/
