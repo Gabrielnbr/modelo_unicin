@@ -68,14 +68,14 @@ def mundaca_tipo_date(df: pd.DataFrame)-> pd.DataFrame:
     
     return df
 
-def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
+""" def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
     
     columns_old = df.columns
     snakecase = lambda x : inflection.underscore(x)
     columns_new = list(map(snakecase,columns_old))
     df.columns = columns_new
     
-    return df
+    return df """
 
 #todo: Essa função aqui tem que ser repensada, já será passada os DataFrames. O negócio é salvar depois.
 def df_pronto_para_consumo()-> pd.DataFrame:

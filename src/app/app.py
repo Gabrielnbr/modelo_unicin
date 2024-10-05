@@ -6,7 +6,6 @@
 
 # Imports
 import streamlit as st
-from paginas import visualizacao, update_dados
 
 st.set_page_config( layout='wide' )
 

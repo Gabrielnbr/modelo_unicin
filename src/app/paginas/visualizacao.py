@@ -203,6 +203,7 @@ def custo_mes(df: pd.DataFrame):
     
 
 def run():
+    
     df = tratar_dados.df_pronto_para_consumo()
     
     df = filtro_maquina(df)
