@@ -13,6 +13,7 @@ pg = st.navigation(
     [st.Page("paginas/visualizacao.py")]
     )
 
+#test
 # Main app
 if __name__ == "__main__":
     pg.run()
