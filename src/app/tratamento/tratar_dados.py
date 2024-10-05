@@ -8,7 +8,6 @@
 
 import os
 import pickle
-import inflection
 
 import pandas       as pd
 import streamlit    as st
