@@ -6,7 +6,7 @@
 
 # Imports
 
-import os
+""" import os
 import pickle
 
 import pandas       as pd
@@ -25,9 +25,9 @@ class VerificarDados:
         tipo_de_dados_processados: dict | None = None,
         ):
         
-        """
-        Documentação
-        """
+        
+        
+        
         
         self.df = df
         
@@ -75,3 +75,4 @@ class VerificarDados:
                     f"Nome coluna: {lista_raw[i]}, Tipo de dado: {self.tipo_de_dados_raw[lista_raw[i]]}\n"
                 return mensagem
         return True
+"""
