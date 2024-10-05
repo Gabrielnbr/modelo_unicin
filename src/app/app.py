@@ -11,8 +11,7 @@ from paginas import visualizacao, update_dados
 st.set_page_config( layout='wide' )
 
 pg = st.navigation(
-    [st.Page("paginas/visualizacao.py"),
-     st.Page("paginas/update_dados.py")]
+    [st.Page("paginas/visualizacao.py")]
     )
 
 # Main app
