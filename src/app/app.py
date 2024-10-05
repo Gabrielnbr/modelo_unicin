@@ -12,12 +12,12 @@ st.set_page_config( layout='wide' )
 
 pg = st.navigation(
     [st.Page("paginas/visualizacao.py"),
-     st.Page("paginas/update_dados.py")])
-pg.run()
+     st.Page("paginas/update_dados.py")]
+    )
 
 # Main app
 if __name__ == "__main__":
-    pass
+    pg.run()
     #app = MultiApp()
     #   Inicialização do app
     #app.add_app("1. Home Page",home.app() )

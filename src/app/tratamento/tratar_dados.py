@@ -17,7 +17,8 @@ import streamlit    as st
 #todo: quando chamado ele vai verificar se está tudo correto com o dataframe
 #todo: se estiver tudo correto, então faz os tratamentos, se não, volta uma msg para o usuário.
 #todo: vê se faz aqui ou se faz na página mesmo do formulário "update_dados"
-def receber_df()-> pd.DataFrame:
+#todo: Testar todas as colunas com os formatos originais, se alguma tivar no formato diferente, então tenta trocar o formato, se não conseguir trocar, avisa ao usuário.
+def receber_df(df:pd.DataFrame)-> pd.DataFrame:
     ...
 
 def importar_arquivos()-> pd.DataFrame:
@@ -30,22 +31,34 @@ def importar_arquivos()-> pd.DataFrame:
     
     ceaec = pickle.load(open("./src/data/processed/2_0_eda_ceaec.pkl","rb"))
     portal = pickle.load(open("./src/data/processed/2_0_eda_portal.pkl","rb"))
+    ceaec_2 = pickle.load(open("./src/data/processed/2_0_eda_ceaec_2.pkl","rb"))
+    portal_2 = pickle.load(open("./src/data/processed/2_0_eda_portal_2.pkl","rb"))
     
-    return portal, ceaec
+    return portal, ceaec, portal_2, ceaec_2
 
 def mesclar_arquivos()-> pd.DataFrame:
     """
     Método para meclar os DataFrames. Aporveito para acrescentar 1 coluna de identificação da tabela.
     Preciso colocar essa identificação para não misturar os dados na hora da análise.
     """
-    portal, ceaec = importar_arquivos()
+    portal, ceaec, portal_2, ceaec_2 = importar_arquivos()
     
     portal['maquina'] = "Portal"
     ceaec['maquina'] = "CEAEC"
+    portal_2['maquina'] = "Portal"
+    ceaec_2['maquina'] = "CEAEC"
     
-    df_pronto = pd.concat([portal,ceaec], ignore_index=True)
+    filtro_ceaec = ceaec['date'].max()
+    ceaec_filter = ceaec_2.loc[ceaec_2['date'] > filtro_ceaec]
     
-    return df_pronto
+    filtro_portal = portal['date'].max()
+    portal_filter = portal_2.loc[portal_2['date'] > filtro_portal]
+    
+    df_pronto_1 = pd.concat([portal,ceaec], ignore_index=True)
+    df_pronto_2 = pd.concat([portal_filter,ceaec_filter], ignore_index=True)
+    df_pronto_final = pd.concat([df_pronto_1,df_pronto_2], ignore_index=True)
+    
+    return df_pronto_final
 
 # Tem que rever o que vai fazer com isso aqui.
 
