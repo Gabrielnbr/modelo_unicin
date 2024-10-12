@@ -84,8 +84,23 @@ def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
     
     return df
 
-# def exportar_arquivo(df:pd.DataFrame):
-#     pickle.dump(open(os.path.join(__CAMINHO_PROCESSED,"maquinas_ccci.pkl"),'rb'))
+def novas_colunas_date(df:pd.DataFrame)-> pd.DataFrame:
+    # year
+    df['year'] = df['date'].dt.year
+    # month
+    df['month'] = df['date'].dt.month
+    # day
+    df['day'] = df['date'].dt.day
+    # week of year
+    df['week_of_year'] = df['date'].dt.isocalendar().week
+    # year week
+    df['year_week'] = df['date'].dt.strftime('%Y-%W')
+    # year month
+    df['year_month'] = df['date'].dt.strftime('%Y-%m')
+
+    df['data_br'] = df['date'].dt.strftime('%d/%m/%Y')
+    
+    return df
 
 #todo: Essa função aqui tem que ser repensada, já será passada os DataFrames. O negócio é salvar depois.
 
@@ -95,6 +110,7 @@ def df_pronto_para_consumo()-> pd.DataFrame:
     
     df_pronto = mesclar_arquivos(lista_arquivos)
     
+    df_pronto = novas_colunas_date(df_pronto)
     # exportar_arquivo(df_pronto)
     
     return df_pronto
