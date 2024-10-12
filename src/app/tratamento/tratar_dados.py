@@ -88,7 +88,7 @@ def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
 #     pickle.dump(open(os.path.join(__CAMINHO_PROCESSED,"maquinas_ccci.pkl"),'rb'))
 
 #todo: Essa função aqui tem que ser repensada, já será passada os DataFrames. O negócio é salvar depois.
-@st.cache_data
+
 def df_pronto_para_consumo()-> pd.DataFrame:
     
     lista_arquivos = importar_arquivos()
