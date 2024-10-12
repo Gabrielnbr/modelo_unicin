@@ -8,9 +8,13 @@
 
 import os
 import pickle
+import inflection
 
 import pandas       as pd
 import streamlit    as st
+
+__CAMINHO_RAW = './src/data/raw/'
+__CAMINHO_PROCESSED = './src/data/processed/'
 
 #todo: a ideia é quando o usuário apertar um botão ele será chamado
 #todo: quando chamado ele vai verificar se está tudo correto com o dataframe
@@ -20,7 +24,7 @@ import streamlit    as st
 def receber_df(df:pd.DataFrame)-> pd.DataFrame:
     ...
 
-def importar_arquivos()-> pd.DataFrame:
+def importar_arquivos()-> list:
     """
     Método para importar os DataFrames salvos no formato pkl.
     Por enquanto não vamos receber dados externos, mas no futuro isso será implementado.
@@ -28,38 +32,41 @@ def importar_arquivos()-> pd.DataFrame:
     #ceaec = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_ceaec.pkl","rb"))
     #portal = pickle.load(open("E:/4_arquivos/1_projeto/modelo_unicin/src/data/processed/2_0_eda_portal.pkl","rb"))
     
-    ceaec = pickle.load(open("./src/data/processed/2_0_eda_ceaec.pkl","rb"))
-    portal = pickle.load(open("./src/data/processed/2_0_eda_portal.pkl","rb"))
-    ceaec_2 = pickle.load(open("./src/data/processed/2_0_eda_ceaec_2.pkl","rb"))
-    portal_2 = pickle.load(open("./src/data/processed/2_0_eda_portal_2.pkl","rb"))
     
-    return portal, ceaec, portal_2, ceaec_2
+    arquivos = os.listdir(__CAMINHO_RAW)
+    lista_arquivos = [arquivo for arquivo in arquivos if arquivo.endswith('.csv')]
+    
+    return lista_arquivos
 
-def mesclar_arquivos()-> pd.DataFrame:
+def mesclar_arquivos(lista_arquivos: list)-> pd.DataFrame:
     """
     Método para meclar os DataFrames. Aporveito para acrescentar 1 coluna de identificação da tabela.
     Preciso colocar essa identificação para não misturar os dados na hora da análise.
     """
-    portal, ceaec, portal_2, ceaec_2 = importar_arquivos()
+    dfs = pd.DataFrame()
+    for arquivo in lista_arquivos:
     
-    portal['maquina'] = "Portal"
-    ceaec['maquina'] = "CEAEC"
-    portal_2['maquina'] = "Portal"
-    ceaec_2['maquina'] = "CEAEC"
+        df = pd.read_csv( os.path.join( __CAMINHO_RAW, arquivo ) )
+        maquina = arquivo.split('_')[1]
+        df['maquina'] = maquina
     
-    filtro_ceaec = ceaec['date'].max()
-    ceaec_filter = ceaec_2.loc[ceaec_2['date'] > filtro_ceaec]
-    
-    filtro_portal = portal['date'].max()
-    portal_filter = portal_2.loc[portal_2['date'] > filtro_portal]
-    
-    df_pronto_1 = pd.concat([portal,ceaec], ignore_index=True)
-    df_pronto_2 = pd.concat([portal_filter,ceaec_filter], ignore_index=True)
-    df_pronto_final = pd.concat([df_pronto_1,df_pronto_2], ignore_index=True)
-    
-    return df_pronto_final
+        df = renomear_colunas(df)
+        df = mundaca_tipo_date(df)
 
-# Tem que rever o que vai fazer com isso aqui.
+        if dfs.empty:
+            dfs = df
+        else:
+            if maquina in dfs['maquina'].values:
+
+                date = dfs.loc[dfs['maquina'] == maquina, 'date']
+                filtro = date.max()
+                df = df.loc[df['date'] > filtro]
+                
+                dfs = pd.concat([dfs,df], ignore_index=True)
+            else:
+                dfs = pd.concat([dfs,df], ignore_index=True)
+
+    return dfs
 
 def mundaca_tipo_date(df: pd.DataFrame)-> pd.DataFrame:
     
@@ -67,19 +74,28 @@ def mundaca_tipo_date(df: pd.DataFrame)-> pd.DataFrame:
     
     return df
 
-""" def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
+
+def renomear_colunas(df: pd.DataFrame)-> pd.DataFrame:
     
     columns_old = df.columns
     snakecase = lambda x : inflection.underscore(x)
     columns_new = list(map(snakecase,columns_old))
     df.columns = columns_new
     
-    return df """
+    return df
+
+# def exportar_arquivo(df:pd.DataFrame):
+#     pickle.dump(open(os.path.join(__CAMINHO_PROCESSED,"maquinas_ccci.pkl"),'rb'))
 
 #todo: Essa função aqui tem que ser repensada, já será passada os DataFrames. O negócio é salvar depois.
+@st.cache_data
 def df_pronto_para_consumo()-> pd.DataFrame:
     
-    df_pronto = mesclar_arquivos()
+    lista_arquivos = importar_arquivos()
+    
+    df_pronto = mesclar_arquivos(lista_arquivos)
+    
+    # exportar_arquivo(df_pronto)
     
     return df_pronto
 
