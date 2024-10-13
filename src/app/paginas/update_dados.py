@@ -8,8 +8,8 @@
 import streamlit as st
 import pandas as pd
 
-from tratamento import tratar_dados as      td
-from tratamento import verificar_dados as   vd
+from app.tratamento import tratar_dados as      td
+from app.tratamento import verificar_dados as   vd
 
 def form_receber_dados() -> pd.DataFrame:
     

@@ -11,7 +11,7 @@ import pandas           as pd
 import streamlit        as st
 import plotly.express   as px
 
-from tratamento import tratar_dados
+from app.tratamento import tratar_dados
 
 # Code
 

@@ -6,12 +6,15 @@
 # Imports
 
 import streamlit as st
-from src.app.tratamento import tratar_dados as trd
+from app.tratamento import tratar_dados as trd
 
 # Code
 
 def home():
     df = trd.df_pronto_para_consumo()
+    
+    st.header("Home, em teste...")
+    
     st.dataframe(df)
 
 def app():
